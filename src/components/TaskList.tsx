@@ -15,15 +15,49 @@ export function TaskList() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
+    /* Deve ser possível adicionar uma nova task no estado de tasks, com os campos id que deve ser gerado de forma aleatória, title que deve ser um texto e isComplete que deve iniciar como false. */
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    if (newTaskTitle !== '') {
+      let newTask: Task = {
+        id: Math.random(),
+        isComplete: false,
+        title: newTaskTitle
+      };
+      setTasks([...tasks, newTask]);
+      setNewTaskTitle('');
+    } else {
+      let msg = 'Could not create a new task: Task Title cannot be empty!';
+      console.log(msg);
+    }
   }
 
   function handleToggleTaskCompletion(id: number) {
+    /* Deve alterar o status de isComplete para uma task com um ID específico que é recebido por parâmetro. */
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    let indexOfTask = tasks.findIndex(function (task) {
+      return task.id === id;
+    });
+    if (indexOfTask !== -1) {
+      tasks[indexOfTask].isComplete = !tasks[indexOfTask].isComplete;
+      setTasks([...tasks]);
+    } else {
+      let msg = `Could not toggle completion of the task: Task with id ${id} not found!`;
+      console.log(msg);
+    }
   }
 
   function handleRemoveTask(id: number) {
+    /* Deve receber um ID por parâmetro e remover a task que contém esse ID do estado. */
     // Remova uma task da listagem pelo ID
+    let filteredTasks = tasks.filter(function (task) {
+      return task.id !== id;
+    });
+    if (filteredTasks.length !== tasks.length) {
+      setTasks(filteredTasks);
+    } else {
+      let msg = `Could not remove task: Task with id ${id} not found!`;
+      console.log(msg);
+    }
   }
 
   return (
